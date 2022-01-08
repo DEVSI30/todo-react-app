@@ -6,6 +6,7 @@ class Todo extends Component {
     constructor(props) {
         super(props);
         this.state = {item: props.item, readOnly: true};
+        this.update = props.update;
         this.delete = props.delete;
     }
 
@@ -22,6 +23,7 @@ class Todo extends Component {
     enterKeyEventHandler = (e) => {
         if (e.key === "Enter") {
             this.setState({readOnly: true});
+            this.update(this.state.item);
         }
     };
 
@@ -35,6 +37,7 @@ class Todo extends Component {
         const thisItem = this.state.item;
         thisItem.done = !thisItem.done;
         this.setState({ item: thisItem });
+        this.update(this.state.item);
     }
 
     render() {
