@@ -1,21 +1,22 @@
 import React, {Component} from 'react';
 import Todo from "./Todo";
 import './App.css';
-import {Container, List, Paper} from "@material-ui/core";
+import {AppBar, Button, Container, Grid, List, Paper, Toolbar, Typography} from "@material-ui/core";
 import AddTodo from "./AddTodo";
-import { call } from "./service/ApiService"
+import {call, signOut} from "./service/ApiService"
+import Loading from "./Loading";
 
 class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            items: [
-            ],
+            items: [],
+            loading: true, // 로딩 중이라는 상태를 표현할 변수
         };
     }
 
     componentDidMount() {
-        call("/todo", "GET", null).then((response) => this.setState({ items: response.data }));
+        call("/todo", "GET", null).then((response) => this.setState({ items: response.data, loading: false }));
     }
 
     add = (item) => {
@@ -47,12 +48,45 @@ class App extends Component {
             </Paper>
         );
 
-        return (
+        // navigationBar 추가
+        const navigationBar = (
+            <AppBar position={"static"}>
+                <Toolbar>
+                    <Grid justifyContent={"space-between"} container>
+                        <Grid item>
+                            <Typography variant={"h6"}>오늘의 할일</Typography>
+                        </Grid>
+                        <Grid>
+                            <Button color={"inherit"} onClick={signOut}>
+                                로그아웃
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </Toolbar>
+            </AppBar>
+        )
+
+        // 로딩 중이 아닐 때 렌더링할 부분
+        const todoListPage = (
             <div className={"App"}>
+                {navigationBar}
                 <Container maxWidth={"md"}>
                     <AddTodo add={this.add}/>
                     <div className="TodoList">{todoItems}</div>
                 </Container>
+            </div>
+        );
+
+        // 로딩 중일 때 렌더링할 부분
+        let content = <Loading/>;
+
+        if (!this.state.loading) {
+            content = todoListPage;
+        }
+
+        return (
+            <div className={"App"}>
+                {content}
             </div>
         );
     }
