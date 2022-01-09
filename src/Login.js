@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {signIn} from "./service/ApiService";
 import {Button, Container, Grid, TextField, Typography} from "@material-ui/core";
+import {Link} from "react-router-dom";
 
 class Login extends Component {
 
@@ -48,6 +49,7 @@ class Login extends Component {
                                 variant={"outlined"}
                                 required
                                 fullWidth
+                                type={"password"}
                                 id={"password"}
                                 label={"패스워드"}
                                 name={"password"}
@@ -63,6 +65,14 @@ class Login extends Component {
                             >
                                 로그인
                             </Button>
+                        </Grid>
+                    </Grid>
+                    <Grid container justifyContent={"flex-end"} style={{marginTop: "10px"}}>
+                        {/*오타, 책에 href로 되어 있음*/}
+                        <Grid item>
+                            <Link to={"/signup"} variant={"body2"}>
+                                <Grid item>회원가입</Grid>
+                            </Link>
                         </Grid>
                     </Grid>
                 </form>
